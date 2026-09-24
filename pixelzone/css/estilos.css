@@ -1,0 +1,330 @@
+/* =========================================================
+   estilos.css - Hoja de estilos propia de PixelZone
+   Se carga DESPUÉS de Bootstrap para personalizarlo.
+   ========================================================= */
+
+/* ---------- 1. Variables (colores y tipografía) ---------- */
+:root {
+  --pz-noche: #1A1433;      /* encabezado, footer, panel lateral */
+  --pz-noche-2: #241B4F;
+  --pz-violeta: #6C3CE9;    /* color principal */
+  --pz-violeta-osc: #5427C9;
+  --pz-coral: #FF4F79;      /* acentos: precios, FREE, avisos */
+  --pz-amarillo: #FFC53D;
+  --pz-niebla: #F4F3FA;     /* fondo de páginas */
+  --pz-tinta: #1F1B2E;      /* texto */
+  --pz-linea: #DDD9EE;
+  --pz-pixel: 4px;          /* unidad base del estilo "pixel" */
+
+  --fuente-titulos: "Chakra Petch", "Trebuchet MS", sans-serif;
+  --fuente-texto: "Nunito Sans", "Segoe UI", Arial, sans-serif;
+
+  /* Bootstrap toma estos valores */
+  --bs-body-font-family: var(--fuente-texto);
+  --bs-body-color: var(--pz-tinta);
+  --bs-body-bg: var(--pz-niebla);
+  --bs-link-color: var(--pz-violeta);
+  --bs-link-color-rgb: 108, 60, 233;
+  --bs-link-hover-color: var(--pz-violeta-osc);
+  --bs-link-hover-color-rgb: 84, 39, 201;
+  --bs-border-color: var(--pz-linea);
+  --bs-primary: var(--pz-violeta);
+  --bs-primary-rgb: 108, 60, 233;
+  --bs-border-radius: 6px;
+}
+
+/* ---------- 2. Base ---------- */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1 0 auto; }
+
+h1, h2, h3, h4, .h1, .h2, .h3, .h4, .h5, .h6, .navbar-brand {
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--pz-coral);
+  outline-offset: 2px;
+}
+
+.titulo-pagina {
+  margin: 2.5rem 0 1.5rem;
+}
+
+.texto-lectura { max-width: 68ch; }
+
+/* ---------- 3. Botones ---------- */
+.btn-pz {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--pz-violeta);
+  --bs-btn-border-color: var(--pz-violeta);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--pz-violeta-osc);
+  --bs-btn-hover-border-color: var(--pz-violeta-osc);
+  --bs-btn-active-bg: var(--pz-noche);
+  --bs-btn-disabled-bg: #9D98B5;
+  --bs-btn-disabled-border-color: #9D98B5;
+  font-weight: 700;
+  box-shadow: var(--pz-pixel) var(--pz-pixel) 0 var(--pz-noche); /* sombra "pixel" dura */
+  transition: transform .1s, box-shadow .1s;
+}
+
+.btn-pz:active {
+  transform: translate(var(--pz-pixel), var(--pz-pixel));
+  box-shadow: none;
+}
+
+.btn-pz:disabled { box-shadow: none; }
+
+.btn-coral {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--pz-coral);
+  --bs-btn-border-color: var(--pz-coral);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #E63A64;
+  --bs-btn-hover-border-color: #E63A64;
+  font-weight: 700;
+}
+
+/* ---------- 4. Encabezado y navegación ---------- */
+.barra-superior {
+  background: var(--pz-noche);
+  font-size: .9rem;
+}
+
+.navbar-pz {
+  background: var(--pz-noche-2);
+  border-bottom: var(--pz-pixel) solid var(--pz-violeta);
+}
+
+.navbar-pz .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-size: 1.4rem;
+}
+
+.navbar-pz .nav-link {
+  font-weight: 600;
+  color: rgba(255, 255, 255, .8);
+}
+
+.navbar-pz .nav-link:hover,
+.navbar-pz .nav-link.active {
+  color: #fff;
+  box-shadow: inset 0 calc(-1 * var(--pz-pixel)) 0 var(--pz-coral);
+}
+
+.boton-carrito {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.boton-carrito .badge {
+  background: var(--pz-coral);
+  border-radius: 0;
+}
+
+/* ---------- 5. Hero del Home ---------- */
+.hero {
+  background: var(--pz-noche-2);
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.05;
+}
+
+.hero .lead { color: rgba(255, 255, 255, .8); max-width: 42ch; }
+
+.hero-imagen {
+  width: 100%;
+  image-rendering: pixelated;
+}
+
+.hero-datos {
+  border-top: 1px solid rgba(255, 255, 255, .15);
+}
+
+.hero-datos dd { font-family: var(--fuente-titulos); font-size: 1.5rem; margin: 0; }
+.hero-datos dt { font-weight: 400; color: rgba(255, 255, 255, .65); font-size: .9rem; }
+
+/* ---------- 6. Tarjetas de producto ---------- */
+.tarjeta-producto {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--pz-linea);
+  border-radius: var(--bs-border-radius);
+  transition: border-color .15s;
+}
+
+.tarjeta-producto:hover { border-color: var(--pz-violeta); }
+
+.tarjeta-producto img {
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.tarjeta-producto .card-title a {
+  color: var(--pz-tinta);
+  text-decoration: none;
+}
+
+.tarjeta-producto .card-title a:hover { color: var(--pz-violeta); }
+
+.etiqueta-producto {
+  position: absolute;
+  top: .6rem;
+  left: .6rem;
+  z-index: 2;
+  border-radius: 0;
+}
+
+.etiqueta-free { background: var(--pz-coral); }
+
+.precio {
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  color: var(--pz-tinta);
+}
+
+.precio-grande { font-size: 2rem; color: var(--pz-violeta); }
+
+/* ---------- 7. Barra lateral de filtros ---------- */
+.barra-lateral {
+  position: sticky;
+  top: 1rem;
+}
+
+.barra-lateral .list-group-item { position: relative; }
+
+/* ---------- 8. Detalle de producto ---------- */
+.galeria-principal {
+  background: #fff;
+  border: 2px solid var(--pz-linea);
+}
+
+.galeria-principal img,
+.miniatura img { object-fit: cover; image-rendering: pixelated; }
+
+.miniatura {
+  width: 84px;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 2px solid var(--pz-linea);
+  background: #fff;
+  overflow: hidden;
+}
+
+.miniatura img { width: 100%; height: 100%; }
+.miniatura.activa { border-color: var(--pz-violeta); }
+
+/* ---------- 9. Carrito ---------- */
+.miniatura-carrito {
+  width: 96px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 2px solid var(--pz-linea);
+  image-rendering: pixelated;
+}
+
+.selector-cantidad { width: auto; }
+.selector-cantidad .input-group-text { min-width: 2.5rem; justify-content: center; }
+
+.resumen-compra {
+  position: sticky;
+  top: 1rem;
+  border: 2px solid var(--pz-noche);
+  box-shadow: 6px 6px 0 var(--pz-violeta);
+}
+
+/* ---------- 10. Formularios ---------- */
+.caja-formulario {
+  background: #fff;
+  border: 2px solid var(--pz-linea);
+  border-radius: var(--bs-border-radius);
+  max-width: 640px;
+}
+
+.caja-formulario .encabezado-formulario {
+  background: var(--pz-noche-2);
+  color: #fff;
+  padding: .9rem 1.25rem;
+  border-radius: calc(var(--bs-border-radius) - 2px) calc(var(--bs-border-radius) - 2px) 0 0;
+}
+
+.form-control,
+.form-select { background-color: #fff; }
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--pz-violeta);
+  box-shadow: 0 0 0 .2rem rgba(108, 60, 233, .2);
+}
+
+.logo-formulario { width: 72px; height: 72px; }
+.caja-angosta { max-width: 460px; }
+
+/* ---------- 11. Blogs y Nosotros ---------- */
+.tarjeta-blog {
+  border: 2px solid var(--pz-linea);
+  background: #fff;
+}
+
+.tarjeta-blog img,
+.imagen-articulo { object-fit: cover; image-rendering: pixelated; }
+
+.articulo p { max-width: 68ch; line-height: 1.7; }
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  border: var(--pz-pixel) solid var(--pz-noche);
+}
+
+/* ---------- 12. Footer ---------- */
+.footer-pz {
+  background: var(--pz-noche);
+  color: rgba(255, 255, 255, .75);
+  border-top: var(--pz-pixel) solid var(--pz-coral);
+}
+
+.footer-pz a { color: rgba(255, 255, 255, .85); text-decoration: none; }
+.footer-pz a:hover { color: #fff; text-decoration: underline; }
+.footer-pz .form-control { border-radius: 0; }
+
+.medios-pago span {
+  display: inline-block;
+  padding: .15rem .5rem;
+  border: 1px solid rgba(255, 255, 255, .35);
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+/* ---------- 13. Responsivo ---------- */
+@media (max-width: 991.98px) {
+  .barra-lateral { position: static; }
+  .resumen-compra { position: static; }
+}
+
+@media (max-width: 575.98px) {
+  .titulo-pagina { margin: 1.5rem 0 1rem; }
+  .item-carrito { flex-wrap: wrap; }
+  .miniatura-carrito { width: 72px; }
+  .hero-datos dd { font-size: 1.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
