@@ -1,0 +1,107 @@
+/* =========================================================
+   admin.css - Estilos del panel de administración
+   Complementa a estilos.css (se cargan ambos).
+   ========================================================= */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Menú lateral vertical siempre visible (R.11) */
+.menu-lateral {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--pz-noche);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-lateral .marca {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: 1.25rem;
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.menu-lateral .nav-link {
+  color: rgba(255, 255, 255, .75);
+  padding: .7rem 1.25rem;
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  border-left: var(--pz-pixel) solid transparent;
+}
+
+.menu-lateral .nav-link:hover { color: #fff; background: rgba(255, 255, 255, .06); }
+
+.menu-lateral .nav-link.active {
+  color: #fff;
+  background: var(--pz-noche-2);
+  border-left-color: var(--pz-coral);
+}
+
+.menu-lateral .pie-menu {
+  margin-top: auto;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  font-size: .9rem;
+}
+
+.admin-contenido {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem;
+}
+
+.resumen-card {
+  border: 2px solid var(--pz-linea);
+  color: var(--pz-tinta);
+}
+
+.resumen-card:hover { border-color: var(--pz-violeta); }
+.resumen-card i { color: var(--pz-violeta); }
+
+.tabla-admin {
+  --bs-table-bg: #fff;
+  background: #fff;
+  border: 2px solid var(--pz-linea);
+}
+
+.tabla-admin thead th {
+  background: var(--pz-noche-2);
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.miniatura-tabla {
+  width: 56px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+#vista-previa {
+  max-width: 200px;
+  image-rendering: pixelated;
+  border: 2px solid var(--pz-linea);
+}
+
+/* En celular el menú pasa arriba y se muestra en horizontal */
+@media (max-width: 767.98px) {
+  .admin-layout { flex-direction: column; }
+  .menu-lateral { width: 100%; }
+  .menu-lateral .nav { flex-direction: row !important; overflow-x: auto; flex-wrap: nowrap; }
+  .menu-lateral .nav-link { border-left: 0; border-bottom: var(--pz-pixel) solid transparent; white-space: nowrap; }
+  .menu-lateral .nav-link.active { border-bottom-color: var(--pz-coral); }
+  .menu-lateral .pie-menu { display: flex; justify-content: space-between; align-items: center; }
+  .admin-contenido { padding: 1.25rem; }
+}
