@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Boton from "./components/Boton";
+import Seccion from "./components/Seccion";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
     //   </div>
     // </div>
     <>
+      <Seccion> Ejemplo </Seccion>
+
       <Boton> iniciar sesion </Boton>
       <Boton> registro </Boton>
     </>
