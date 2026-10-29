@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Boton from "./components/Boton";
 import Seccion from "./components/Seccion";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -19,9 +20,9 @@ function App() {
     // </div>
     <>
       <Seccion> Ejemplo </Seccion>
-
-      <Boton> iniciar sesion </Boton>
-      <Boton> registro </Boton>
+      <Login></Login>
+      <Boton clase="btn btn-pz btn-lg"> iniciar sesion </Boton>
+      <Boton clase="btn btn-pz btn-lg"> registro </Boton>
     </>
   );
 }
