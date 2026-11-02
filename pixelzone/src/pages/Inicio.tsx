@@ -1,3 +1,7 @@
+import { useMemo } from "react";
+import TarjetaProducto from "../components/TarjetaProducto";
+import { CATEGORIAS } from "../data/datos";
+import { obtenerProductos } from "../utils/almacen";
 import { Link } from "react-router-dom";
 
 const datos = [
@@ -6,7 +10,12 @@ const datos = [
   { valor: "10%", texto: "de descuento con GAMER10" },
 ];
 
+
 export default function Inicio() {
+  const destacados = useMemo(() => {
+  const disponibles = obtenerProductos().filter((p) => p.stock > 0);
+  return CATEGORIAS.flatMap((c) => disponibles.filter((p) => p.categoria === c).slice(0, 2)).slice(0, 8);
+}, []);
   return (
     <main>
       <section className="hero">
@@ -53,9 +62,11 @@ export default function Inicio() {
           <h2 id="titulo-destacados" className="mb-0">Productos destacados</h2>
           <Link to="/productos">Ver todo el catálogo</Link>
         </div>
-        <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-          {/* Aquí irán las tarjetas de producto */}
-        </div>
+<div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+  {destacados.map((p) => (
+    <TarjetaProducto key={p.codigo} producto={p} conBoton={false} />
+  ))}
+</div>
       </section>
     </main>
   );
