@@ -2,6 +2,11 @@ import { Link } from "react-router-dom";
 import { useCarrito } from "../context/carrito";
 import { buscarProducto, formatearPrecio, rutaImagen } from "../utils/almacen";
 
+// En el resumen, un monto de 0 se muestra como $0 y no como GRATIS
+function formatearMonto(valor: number) {
+  return formatearPrecio(valor).replace("GRATIS", "$0");
+}
+
 export default function Carrito() {
   const { items, cambiarCantidad, eliminar } = useCarrito();
 
@@ -10,6 +15,12 @@ export default function Carrito() {
     const producto = buscarProducto(item.codigo);
     return producto ? [{ producto, cantidad: item.cantidad }] : [];
   });
+
+  const subtotal = lineas.reduce(
+    (suma, l) => suma + l.producto.precio * l.cantidad,
+    0,
+  );
+  const total = subtotal;
 
   return (
     <main>
@@ -95,9 +106,13 @@ export default function Carrito() {
             <div className="resumen-compra bg-white p-4">
               <h2 className="h5">Resumen</h2>
               <dl className="mb-3">
+                <div className="d-flex justify-content-between">
+                  <dt className="fw-normal">Subtotal</dt>
+                  <dd className="mb-1">{formatearMonto(subtotal)}</dd>
+                </div>
                 <div className="d-flex justify-content-between border-top pt-2 mt-2">
                   <dt className="h5">Total</dt>
-                  <dd className="h4 precio mb-0">$0</dd>
+                  <dd className="h4 precio mb-0">{formatearMonto(total)}</dd>
                 </div>
               </dl>
               <div className="d-grid">
