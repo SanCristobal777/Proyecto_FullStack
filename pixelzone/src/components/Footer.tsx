@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { CATEGORIAS } from "../data/datos";
+import { estaActiva, paginasEn } from "../data/directorio";
 
 const DOMINIOS_PERMITIDOS = ["@duoc.cl", "@profesor.duoc.cl", "@gmail.com"];
 
@@ -50,34 +51,29 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="col-6 col-md-2">
-            <p className="h6 text-white">Categorías</p>
-            <ul className="list-unstyled">
-              {CATEGORIAS.map((c) => (
-                <li key={c}>
-                  <Link to={`/productos?categoria=${encodeURIComponent(c)}`}>
-                    {c}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {estaActiva("productos") && (
+            <div className="col-6 col-md-2">
+              <p className="h6 text-white">Categorías</p>
+              <ul className="list-unstyled">
+                {CATEGORIAS.map((c) => (
+                  <li key={c}>
+                    <Link to={`/productos?categoria=${encodeURIComponent(c)}`}>
+                      {c}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="col-6 col-md-2">
             <p className="h6 text-white">Tienda</p>
             <ul className="list-unstyled">
-              <li>
-                <Link to="/nosotros">Nosotros</Link>
-              </li>
-              <li>
-                <Link to="/blogs">Blogs</Link>
-              </li>
-              <li>
-                <Link to="/contacto">Contacto</Link>
-              </li>
-              <li>
-                <Link to="/carrito">Carrito</Link>
-              </li>
+              {paginasEn("footer").map((p) => (
+                <li key={p.id}>
+                  <Link to={p.ruta}>{p.titulo}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -1,25 +1,28 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useCarrito } from "../context/carrito";
+import { estaActiva, paginasEn } from "../data/directorio";
 
 export default function NavBar() {
   const [abierto, setAbierto] = useState(false);
   const { cantidadTotal } = useCarrito();
 
   const cerrar = () => setAbierto(false);
+  const carritoActivo = estaActiva("carrito");
 
   return (
     <header>
       <div className="barra-superior py-1">
         <div className="container d-flex justify-content-end">
           <div className="text-white">
-            <Link to="/login" className="link-light">
-              Iniciar sesión
-            </Link>
-            <span className="text-white-50"> | </span>
-            <Link to="/registro" className="link-light">
-              Registrar usuario
-            </Link>
+            {paginasEn("superior").map((p, i) => (
+              <Fragment key={p.id}>
+                {i > 0 && <span className="text-white-50"> | </span>}
+                <Link to={p.ruta} className="link-light">
+                  {p.titulo}
+                </Link>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
@@ -33,14 +36,16 @@ export default function NavBar() {
             <img src="/img/logo.svg" alt="" width={36} height={36} /> PixelZone
           </Link>
 
-          <Link
-            className="boton-carrito ms-auto me-3 d-lg-none"
-            to="/carrito"
-            aria-label="Carrito"
-          >
-            <i className="bi bi-cart3" aria-hidden="true"></i>{" "}
-            <span className="badge">{cantidadTotal}</span>
-          </Link>
+          {carritoActivo && (
+            <Link
+              className="boton-carrito ms-auto me-3 d-lg-none"
+              to="/carrito"
+              aria-label="Carrito"
+            >
+              <i className="bi bi-cart3" aria-hidden="true"></i>{" "}
+              <span className="badge">{cantidadTotal}</span>
+            </Link>
+          )}
 
           <button
             className="navbar-toggler"
@@ -58,40 +63,30 @@ export default function NavBar() {
             id="menu"
           >
             <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/" end onClick={cerrar}>
-                  Home
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/productos" onClick={cerrar}>
-                  Productos
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/nosotros" onClick={cerrar}>
-                  Nosotros
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/blogs" onClick={cerrar}>
-                  Blogs
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/contacto" onClick={cerrar}>
-                  Contacto
-                </NavLink>
-              </li>
+              {paginasEn("menu").map((p) => (
+                <li className="nav-item" key={p.id}>
+                  <NavLink
+                    className="nav-link"
+                    to={p.ruta}
+                    end={p.ruta === "/"}
+                    onClick={cerrar}
+                  >
+                    {p.titulo}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
-            <Link
-              className="boton-carrito d-none d-lg-inline-block"
-              to="/carrito"
-              onClick={cerrar}
-            >
-              <i className="bi bi-cart3" aria-hidden="true"></i> Carrito{" "}
-              <span className="badge">{cantidadTotal}</span>
-            </Link>
+
+            {carritoActivo && (
+              <Link
+                className="boton-carrito d-none d-lg-inline-block"
+                to="/carrito"
+                onClick={cerrar}
+              >
+                <i className="bi bi-cart3" aria-hidden="true"></i> Carrito{" "}
+                <span className="badge">{cantidadTotal}</span>
+              </Link>
+            )}
           </div>
         </div>
       </nav>
