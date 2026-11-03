@@ -1,5 +1,8 @@
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useCarrito } from "../context/carrito";
+import { CUPONES } from "../data/datos";
 import { buscarProducto, formatearPrecio, rutaImagen } from "../utils/almacen";
 
 // En el resumen, un monto de 0 se muestra como $0 y no como GRATIS
@@ -9,6 +12,9 @@ function formatearMonto(valor: number) {
 
 export default function Carrito() {
   const { items, cambiarCantidad, eliminar } = useCarrito();
+  const [cupon, setCupon] = useState("");
+  const [cuponAplicado, setCuponAplicado] = useState<string | null>(null);
+  const [errorCupon, setErrorCupon] = useState("");
 
   // Se ignoran los productos que ya no existen en el catálogo
   const lineas = items.flatMap((item) => {
@@ -20,7 +26,25 @@ export default function Carrito() {
     (suma, l) => suma + l.producto.precio * l.cantidad,
     0,
   );
-  const total = subtotal;
+  const descuento = cuponAplicado
+    ? Math.round(subtotal * CUPONES[cuponAplicado])
+    : 0;
+  const total = subtotal - descuento;
+
+  const aplicarCupon = (e: FormEvent) => {
+    e.preventDefault();
+    const codigo = cupon.trim().toUpperCase();
+    if (codigo === "") {
+      setErrorCupon("Escribe un cupón.");
+      return;
+    }
+    if (CUPONES[codigo] === undefined) {
+      setErrorCupon(`El cupón ${codigo} no existe o ya venció.`);
+      return;
+    }
+    setErrorCupon("");
+    setCuponAplicado(codigo);
+  };
 
   return (
     <main>
@@ -110,11 +134,50 @@ export default function Carrito() {
                   <dt className="fw-normal">Subtotal</dt>
                   <dd className="mb-1">{formatearMonto(subtotal)}</dd>
                 </div>
+                {descuento > 0 && (
+                  <div className="d-flex justify-content-between text-success">
+                    <dt className="fw-normal">Descuento</dt>
+                    <dd className="mb-1">−{formatearMonto(descuento)}</dd>
+                  </div>
+                )}
                 <div className="d-flex justify-content-between border-top pt-2 mt-2">
                   <dt className="h5">Total</dt>
                   <dd className="h4 precio mb-0">{formatearMonto(total)}</dd>
                 </div>
               </dl>
+
+              <form onSubmit={aplicarCupon} noValidate className="mb-3">
+                <label htmlFor="cupon" className="form-label small">
+                  Cupón de descuento
+                </label>
+                <div className="input-group has-validation">
+                  <input
+                    type="text"
+                    className={`form-control text-uppercase ${
+                      errorCupon
+                        ? "is-invalid"
+                        : cuponAplicado
+                          ? "is-valid"
+                          : ""
+                    }`}
+                    id="cupon"
+                    placeholder="Ej: GAMER10"
+                    value={cupon}
+                    onChange={(e) => setCupon(e.target.value)}
+                  />
+                  <button className="btn btn-outline-secondary" type="submit">
+                    Aplicar
+                  </button>
+                  <div className="invalid-feedback">{errorCupon}</div>
+                  {cuponAplicado && (
+                    <div className="valid-feedback">
+                      Cupón {cuponAplicado} aplicado:{" "}
+                      {Math.round(CUPONES[cuponAplicado] * 100)}% de descuento.
+                    </div>
+                  )}
+                </div>
+              </form>
+
               <div className="d-grid">
                 <button type="button" className="btn btn-pz btn-lg" disabled>
                   Pagar
