@@ -1,8 +1,21 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { CATEGORIAS } from "../data/datos";
 
-const categorias = ["Consolas", "Videojuegos", "Periféricos", "Accesorios", "Sillas gamer"];
+const DOMINIOS_PERMITIDOS = ["@duoc.cl", "@profesor.duoc.cl", "@gmail.com"];
+
+function validarCorreo(valor: string): string {
+  const correo = valor.trim().toLowerCase();
+  if (correo === "") return "Ingresa el correo.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+    return "Escribe un correo válido, por ejemplo nombre@duoc.cl.";
+  }
+  if (!DOMINIOS_PERMITIDOS.some((d) => correo.endsWith(d))) {
+    return "Solo se aceptan correos @duoc.cl, @profesor.duoc.cl o @gmail.com.";
+  }
+  return "";
+}
 
 export default function Footer() {
   const [correo, setCorreo] = useState("");
@@ -11,9 +24,9 @@ export default function Footer() {
 
   const suscribir = (e: FormEvent) => {
     e.preventDefault();
-    const valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
-    if (!valido) {
-      setError("Ingresa un correo válido.");
+    const mensaje = validarCorreo(correo);
+    if (mensaje) {
+      setError(mensaje);
       setEnviado(false);
       return;
     }
@@ -28,7 +41,10 @@ export default function Footer() {
         <div className="row g-4">
           <div className="col-md-4">
             <p className="h5 text-white">PixelZone</p>
-            <p>Tienda gamer online. Consolas, videojuegos y periféricos con despacho a todo Chile.</p>
+            <p>
+              Tienda gamer online. Consolas, videojuegos y periféricos con
+              despacho a todo Chile.
+            </p>
             <p className="medios-pago mb-0" aria-label="Medios de pago">
               <span>VISA</span> <span>Mastercard</span> <span>Webpay</span>
             </p>
@@ -37,9 +53,11 @@ export default function Footer() {
           <div className="col-6 col-md-2">
             <p className="h6 text-white">Categorías</p>
             <ul className="list-unstyled">
-              {categorias.map((c) => (
+              {CATEGORIAS.map((c) => (
                 <li key={c}>
-                  <Link to={`/productos?categoria=${encodeURIComponent(c)}`}>{c}</Link>
+                  <Link to={`/productos?categoria=${encodeURIComponent(c)}`}>
+                    {c}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -48,10 +66,18 @@ export default function Footer() {
           <div className="col-6 col-md-2">
             <p className="h6 text-white">Tienda</p>
             <ul className="list-unstyled">
-              <li><Link to="/nosotros">Nosotros</Link></li>
-              <li><Link to="/blogs">Blogs</Link></li>
-              <li><Link to="/contacto">Contacto</Link></li>
-              <li><Link to="/carrito">Carrito</Link></li>
+              <li>
+                <Link to="/nosotros">Nosotros</Link>
+              </li>
+              <li>
+                <Link to="/blogs">Blogs</Link>
+              </li>
+              <li>
+                <Link to="/contacto">Contacto</Link>
+              </li>
+              <li>
+                <Link to="/carrito">Carrito</Link>
+              </li>
             </ul>
           </div>
 
@@ -69,10 +95,16 @@ export default function Footer() {
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
                 />
-                <button className="btn btn-coral" type="submit">Suscribirme</button>
+                <button className="btn btn-coral" type="submit">
+                  Suscribirme
+                </button>
                 <div className="invalid-feedback">{error}</div>
               </div>
-              {enviado && <p className="small text-success mt-2 mb-0">¡Gracias por suscribirte!</p>}
+              {enviado && (
+                <p className="small text-success mt-2 mb-0">
+                  Listo, te avisaremos de las ofertas.
+                </p>
+              )}
             </form>
           </div>
         </div>
