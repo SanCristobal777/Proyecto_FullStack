@@ -3,12 +3,18 @@ import type { ReactNode } from "react";
 interface Props {
   clase?: string;
   children: ReactNode;
-  alHacerClick: () => void; // dentro del parentesis va ir el tipo del parametro de entrada, el tipo despues de la flecha es el retorno de la funcion entrante
+  alHacerClick?: () => void; // opcional: dentro de un formulario basta con el onSubmit
+  tipo?: "submit" | "button";
 }
 
-function Boton({ clase = "btn btn-pz btn-lg", children, alHacerClick }: Props) {
+function Boton({
+  clase = "btn btn-pz btn-lg",
+  children,
+  alHacerClick,
+  tipo = "submit",
+}: Props) {
   return (
-    <button type="submit" className={clase} onClick={alHacerClick}>
+    <button type={tipo} className={clase} onClick={alHacerClick}>
       {children}
     </button>
   );
