@@ -251,3 +251,57 @@ export const ORDENES_INICIALES: Orden[] = [
     ],
   },
 ];
+export type TipoUsuario = "Administrador" | "Vendedor" | "Cliente";
+
+export interface Usuario {
+  run: string;
+  nombre: string;
+  apellidos: string;
+  correo: string;
+  fechaNacimiento: string;
+  tipo: TipoUsuario;
+  region: string;
+  comuna: string;
+  direccion: string;
+  password: string;
+}
+
+// Usuarios de prueba (contraseñas: admin123 / vende123 / clie123)
+export const USUARIOS_INICIALES: Usuario[] = [
+  {
+    run: "123456785",
+    nombre: "Ana",
+    apellidos: "Rojas Muñoz",
+    correo: "admin@duoc.cl",
+    fechaNacimiento: "1995-04-12",
+    tipo: "Administrador",
+    region: "Biobío",
+    comuna: "Concepción",
+    direccion: "Av. Paicaví 123",
+    password: "admin123",
+  },
+  {
+    run: "176543213",
+    nombre: "Bruno",
+    apellidos: "Soto Pérez",
+    correo: "vendedor@duoc.cl",
+    fechaNacimiento: "1998-09-30",
+    tipo: "Vendedor",
+    region: "Biobío",
+    comuna: "Talcahuano",
+    direccion: "Colón 456",
+    password: "vende123",
+  },
+  {
+    run: "201234565",
+    nombre: "Camila",
+    apellidos: "Fuentes Vera",
+    correo: "cliente@gmail.com",
+    fechaNacimiento: "2002-01-20",
+    tipo: "Cliente",
+    region: "Región Metropolitana de Santiago",
+    comuna: "Providencia",
+    direccion: "Los Leones 789",
+    password: "clie123",
+  },
+];

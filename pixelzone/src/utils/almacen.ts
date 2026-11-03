@@ -1,16 +1,21 @@
-import { ORDENES_INICIALES, PRODUCTOS_INICIALES } from "../data/datos";
-import type { Orden, Producto } from "../data/datos";
+import {
+  ORDENES_INICIALES,
+  PRODUCTOS_INICIALES,
+  USUARIOS_INICIALES,
+} from "../data/datos";
+import type { Orden, Producto, TipoUsuario, Usuario } from "../data/datos";
 
 const CLAVE_PRODUCTOS = "pz_productos";
 const CLAVE_ORDENES = "pz_ordenes";
+const CLAVE_USUARIOS = "pz_usuarios";
 const CLAVE_SESION = "pz_sesion";
 
 export interface Sesion {
-  run?: string;
-  nombre?: string;
-  apellidos?: string;
-  correo?: string;
-  tipo?: string;
+  run: string;
+  nombre: string;
+  apellidos: string;
+  correo: string;
+  tipo: TipoUsuario;
 }
 
 export function guardarProductos(productos: Producto[]) {
@@ -47,6 +52,36 @@ export function obtenerOrdenes(): Orden[] {
   }
   guardarOrdenes(ORDENES_INICIALES);
   return ORDENES_INICIALES;
+}
+
+export function guardarUsuarios(usuarios: Usuario[]) {
+  localStorage.setItem(CLAVE_USUARIOS, JSON.stringify(usuarios));
+}
+
+// La primera vez copia los usuarios de prueba a localStorage
+export function obtenerUsuarios(): Usuario[] {
+  try {
+    const guardado = localStorage.getItem(CLAVE_USUARIOS);
+    if (guardado) {
+      const lista: unknown = JSON.parse(guardado);
+      if (Array.isArray(lista)) return lista as Usuario[];
+    }
+  } catch {
+    /* si el JSON está dañado se vuelve a sembrar */
+  }
+  guardarUsuarios(USUARIOS_INICIALES);
+  return USUARIOS_INICIALES;
+}
+
+// Guarda en la sesión solo los datos necesarios (nunca la contraseña)
+export function iniciarSesion(usuario: Usuario) {
+  const { run, nombre, apellidos, correo, tipo } = usuario;
+  const sesion: Sesion = { run, nombre, apellidos, correo, tipo };
+  localStorage.setItem(CLAVE_SESION, JSON.stringify(sesion));
+}
+
+export function cerrarSesion() {
+  localStorage.removeItem(CLAVE_SESION);
 }
 
 // Devuelve el usuario con sesión iniciada, o null si no hay
