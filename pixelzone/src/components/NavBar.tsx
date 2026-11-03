@@ -1,28 +1,49 @@
 import { Fragment, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useCarrito } from "../context/carrito";
+import { useSesion } from "../context/sesion";
 import { estaActiva, paginasEn } from "../data/directorio";
 
 export default function NavBar() {
   const [abierto, setAbierto] = useState(false);
   const { cantidadTotal } = useCarrito();
+  const { sesion, cerrar: cerrarSesion } = useSesion();
+  const navegar = useNavigate();
 
   const cerrar = () => setAbierto(false);
   const carritoActivo = estaActiva("carrito");
+
+  const salir = () => {
+    cerrarSesion();
+    navegar("/");
+  };
 
   return (
     <header>
       <div className="barra-superior py-1">
         <div className="container d-flex justify-content-end">
           <div className="text-white">
-            {paginasEn("superior").map((p, i) => (
-              <Fragment key={p.id}>
-                {i > 0 && <span className="text-white-50"> | </span>}
-                <Link to={p.ruta} className="link-light">
-                  {p.titulo}
-                </Link>
-              </Fragment>
-            ))}
+            {sesion ? (
+              <>
+                <span className="me-2">Hola, {sesion.nombre}</span>
+                <button
+                  type="button"
+                  className="btn btn-link link-light p-0 align-baseline"
+                  onClick={salir}
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              paginasEn("superior").map((p, i) => (
+                <Fragment key={p.id}>
+                  {i > 0 && <span className="text-white-50"> | </span>}
+                  <Link to={p.ruta} className="link-light">
+                    {p.titulo}
+                  </Link>
+                </Fragment>
+              ))
+            )}
           </div>
         </div>
       </div>

@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Boton from "../components/Boton";
 import Seccion from "../components/Seccion";
 import { estaActiva } from "../data/directorio";
-import { iniciarSesion, obtenerUsuarios } from "../utils/almacen";
+import { useSesion } from "../context/sesion";
+import { obtenerUsuarios } from "../utils/almacen";
 import {
   correoPermitido,
   largoEntre,
@@ -33,6 +34,7 @@ function claseCampo(error: string, valor: string) {
 
 function Login() {
   const navegar = useNavigate();
+  const { iniciar } = useSesion();
   const [valores, setValores] = useState<Record<Campo, string>>({
     correo: "",
     password: "",
@@ -78,7 +80,7 @@ function Login() {
       return;
     }
 
-    iniciarSesion(usuario);
+    iniciar(usuario);
     setMensaje({ tipo: "success", texto: `Bienvenido/a, ${usuario.nombre}.` });
     // Cuando exista el panel de administración, Administrador y Vendedor irán allá
     setTimeout(() => navegar("/"), 800);
