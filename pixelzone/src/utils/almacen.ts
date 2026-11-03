@@ -1,7 +1,17 @@
-import { PRODUCTOS_INICIALES } from "../data/datos";
-import type { Producto } from "../data/datos";
+import { ORDENES_INICIALES, PRODUCTOS_INICIALES } from "../data/datos";
+import type { Orden, Producto } from "../data/datos";
 
 const CLAVE_PRODUCTOS = "pz_productos";
+const CLAVE_ORDENES = "pz_ordenes";
+const CLAVE_SESION = "pz_sesion";
+
+export interface Sesion {
+  run?: string;
+  nombre?: string;
+  apellidos?: string;
+  correo?: string;
+  tipo?: string;
+}
 
 export function guardarProductos(productos: Producto[]) {
   localStorage.setItem(CLAVE_PRODUCTOS, JSON.stringify(productos));
@@ -21,6 +31,32 @@ export function obtenerProductos(): Producto[] {
 
 export function buscarProducto(codigo: string | null | undefined) {
   return obtenerProductos().find((p) => p.codigo === codigo);
+}
+
+export function guardarOrdenes(ordenes: Orden[]) {
+  localStorage.setItem(CLAVE_ORDENES, JSON.stringify(ordenes));
+}
+
+// La primera vez copia las órdenes de ejemplo a localStorage
+export function obtenerOrdenes(): Orden[] {
+  try {
+    const guardado = localStorage.getItem(CLAVE_ORDENES);
+    if (guardado) return JSON.parse(guardado) as Orden[];
+  } catch {
+    /* si el JSON está dañado se vuelve a sembrar */
+  }
+  guardarOrdenes(ORDENES_INICIALES);
+  return ORDENES_INICIALES;
+}
+
+// Devuelve el usuario con sesión iniciada, o null si no hay
+export function obtenerSesion(): Sesion | null {
+  try {
+    const guardada = localStorage.getItem(CLAVE_SESION);
+    return guardada ? (JSON.parse(guardada) as Sesion) : null;
+  } catch {
+    return null;
+  }
 }
 
 export function rutaImagen(ruta: string) {
