@@ -3,7 +3,16 @@ import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useCarrito } from "../context/carrito";
 import { CUPONES } from "../data/datos";
-import { buscarProducto, formatearPrecio, rutaImagen } from "../utils/almacen";
+import {
+  buscarProducto,
+  formatearPrecio,
+  guardarOrdenes,
+  guardarProductos,
+  obtenerOrdenes,
+  obtenerProductos,
+  obtenerSesion,
+  rutaImagen,
+} from "../utils/almacen";
 
 // En el resumen, un monto de 0 se muestra como $0 y no como GRATIS
 function formatearMonto(valor: number) {
@@ -11,10 +20,12 @@ function formatearMonto(valor: number) {
 }
 
 export default function Carrito() {
-  const { items, cambiarCantidad, eliminar } = useCarrito();
+  const { items, cambiarCantidad, eliminar, vaciar } = useCarrito();
   const [cupon, setCupon] = useState("");
   const [cuponAplicado, setCuponAplicado] = useState<string | null>(null);
   const [errorCupon, setErrorCupon] = useState("");
+  const [ordenCreada, setOrdenCreada] = useState<string | null>(null);
+  const [errorPago, setErrorPago] = useState("");
 
   // Se ignoran los productos que ya no existen en el catálogo
   const lineas = items.flatMap((item) => {
@@ -46,10 +57,70 @@ export default function Carrito() {
     setCuponAplicado(codigo);
   };
 
+  // Pagar: crea la orden, descuenta stock y vacía el carrito
+  const pagar = () => {
+    if (lineas.length === 0) return;
+
+    const sinStock = lineas.find((l) => l.cantidad > l.producto.stock);
+    if (sinStock) {
+      setOrdenCreada(null);
+      setErrorPago(`No hay stock suficiente de ${sinStock.producto.nombre}.`);
+      return;
+    }
+
+    // Se descuenta el stock de cada producto comprado
+    const productos = obtenerProductos().map((p) => {
+      const linea = lineas.find((l) => l.producto.codigo === p.codigo);
+      return linea ? { ...p, stock: p.stock - linea.cantidad } : p;
+    });
+
+    const ordenes = obtenerOrdenes();
+    const numero = "OC-" + (1001 + ordenes.length);
+    const sesion = obtenerSesion();
+
+    guardarProductos(productos);
+    guardarOrdenes([
+      ...ordenes,
+      {
+        numero,
+        fecha: new Date().toISOString().slice(0, 10),
+        cliente: sesion?.correo ?? "Invitado",
+        estado: "Pagada",
+        items: lineas.map((l) => ({
+          codigo: l.producto.codigo,
+          nombre: l.producto.nombre,
+          precio: l.producto.precio,
+          cantidad: l.cantidad,
+        })),
+        total,
+      },
+    ]);
+
+    vaciar();
+    setCupon("");
+    setCuponAplicado(null);
+    setErrorCupon("");
+    setErrorPago("");
+    setOrdenCreada(numero);
+  };
+
   return (
     <main>
       <div className="container">
         <h1 className="titulo-pagina">Mi carrito de compras</h1>
+
+        {ordenCreada && (
+          <div className="alert alert-success" role="status">
+            Compra realizada. Tu número de orden es{" "}
+            <strong>{ordenCreada}</strong>.
+          </div>
+        )}
+        {errorPago && (
+          <div className="alert alert-danger" role="alert">
+            {errorPago}
+          </div>
+        )}
+
         <div className="row g-4">
           <section className="col-lg-8" aria-label="Productos en el carrito">
             {lineas.length === 0 ? (
@@ -179,7 +250,12 @@ export default function Carrito() {
               </form>
 
               <div className="d-grid">
-                <button type="button" className="btn btn-pz btn-lg" disabled>
+                <button
+                  type="button"
+                  className="btn btn-pz btn-lg"
+                  disabled={lineas.length === 0}
+                  onClick={pagar}
+                >
                   Pagar
                 </button>
               </div>
