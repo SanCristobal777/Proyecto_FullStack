@@ -14,6 +14,9 @@ export interface CarritoCtx {
   items: ItemCarrito[];
   cantidadTotal: number;
   agregar: (codigo: string, cantidad?: number) => Resultado;
+  cambiarCantidad: (codigo: string, cambio: number) => Resultado;
+  eliminar: (codigo: string) => void;
+  vaciar: () => void;
 }
 
 export const CarritoContext = createContext<CarritoCtx | null>(null);

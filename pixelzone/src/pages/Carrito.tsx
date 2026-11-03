@@ -3,7 +3,7 @@ import { useCarrito } from "../context/carrito";
 import { buscarProducto, formatearPrecio, rutaImagen } from "../utils/almacen";
 
 export default function Carrito() {
-  const { items } = useCarrito();
+  const { items, cambiarCantidad, eliminar } = useCarrito();
 
   // Se ignoran los productos que ya no existen en el catálogo
   const lineas = items.flatMap((item) => {
@@ -47,12 +47,44 @@ export default function Carrito() {
                     <p className="small text-body-secondary mb-2">
                       {formatearPrecio(producto.precio)} c/u
                     </p>
-                    <p className="small mb-0">Cantidad: {cantidad}</p>
+                    <div className="input-group input-group-sm selector-cantidad">
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        aria-label="Quitar una unidad"
+                        disabled={cantidad <= 1}
+                        onClick={() => cambiarCantidad(producto.codigo, -1)}
+                      >
+                        −
+                      </button>
+                      <span
+                        className="input-group-text bg-body"
+                        aria-live="polite"
+                      >
+                        {cantidad}
+                      </span>
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        aria-label="Agregar una unidad"
+                        disabled={cantidad >= producto.stock}
+                        onClick={() => cambiarCantidad(producto.codigo, 1)}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                   <div className="text-end">
-                    <p className="fw-semibold mb-0">
+                    <p className="fw-semibold mb-2">
                       {formatearPrecio(producto.precio * cantidad)}
                     </p>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-link link-danger p-0"
+                      onClick={() => eliminar(producto.codigo)}
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 </article>
               ))

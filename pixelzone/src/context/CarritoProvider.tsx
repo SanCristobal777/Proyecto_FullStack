@@ -16,7 +16,10 @@ function leerCarrito(): ItemCarrito[] {
 
 export default function CarritoProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ItemCarrito[]>(leerCarrito);
-  const [aviso, setAviso] = useState<{ mensaje: string; tipo: "success" | "warning" } | null>(null);
+  const [aviso, setAviso] = useState<{
+    mensaje: string;
+    tipo: "success" | "warning";
+  } | null>(null);
 
   useEffect(() => {
     localStorage.setItem(CLAVE_CARRITO, JSON.stringify(items));
@@ -40,37 +43,94 @@ export default function CarritoProvider({ children }: { children: ReactNode }) {
       } else {
         const actual = items.find((i) => i.codigo === codigo)?.cantidad ?? 0;
         if (actual + cantidad > p.stock) {
-          resultado = { ok: false, mensaje: `Solo quedan ${p.stock} unidades de ${p.nombre}.` };
+          resultado = {
+            ok: false,
+            mensaje: `Solo quedan ${p.stock} unidades de ${p.nombre}.`,
+          };
         } else {
           setItems((prev) =>
             prev.some((i) => i.codigo === codigo)
-              ? prev.map((i) => (i.codigo === codigo ? { ...i, cantidad: i.cantidad + cantidad } : i))
-              : [...prev, { codigo, cantidad }]
+              ? prev.map((i) =>
+                  i.codigo === codigo
+                    ? { ...i, cantidad: i.cantidad + cantidad }
+                    : i,
+                )
+              : [...prev, { codigo, cantidad }],
           );
           resultado = { ok: true, mensaje: `${p.nombre} agregado al carrito.` };
         }
       }
-      setAviso({ mensaje: resultado.mensaje, tipo: resultado.ok ? "success" : "warning" });
+      setAviso({
+        mensaje: resultado.mensaje,
+        tipo: resultado.ok ? "success" : "warning",
+      });
       return resultado;
     },
-    [items]
+    [items],
   );
+
+  // Suma o resta unidades (cambio = 1 o -1) respetando el stock
+  const cambiarCantidad = useCallback(
+    (codigo: string, cambio: number): Resultado => {
+      const item = items.find((i) => i.codigo === codigo);
+      const p = buscarProducto(codigo);
+      if (!item || !p) {
+        return { ok: false, mensaje: "El producto no está en el carrito." };
+      }
+
+      const nueva = item.cantidad + cambio;
+      if (nueva < 1) {
+        return { ok: false, mensaje: "La cantidad mínima es 1." };
+      }
+      if (nueva > p.stock) {
+        const resultado: Resultado = {
+          ok: false,
+          mensaje: `Solo quedan ${p.stock} unidades de ${p.nombre}.`,
+        };
+        setAviso({ mensaje: resultado.mensaje, tipo: "warning" });
+        return resultado;
+      }
+
+      setItems((prev) =>
+        prev.map((i) => (i.codigo === codigo ? { ...i, cantidad: nueva } : i)),
+      );
+      return { ok: true, mensaje: "Cantidad actualizada." };
+    },
+    [items],
+  );
+
+  const eliminar = useCallback((codigo: string) => {
+    setItems((prev) => prev.filter((i) => i.codigo !== codigo));
+  }, []);
+
+  const vaciar = useCallback(() => {
+    setItems([]);
+  }, []);
 
   const valor = useMemo(
     () => ({
       items,
       cantidadTotal: items.reduce((suma, i) => suma + i.cantidad, 0),
       agregar,
+      cambiarCantidad,
+      eliminar,
+      vaciar,
     }),
-    [items, agregar]
+    [items, agregar, cambiarCantidad, eliminar, vaciar],
   );
 
   return (
     <CarritoContext.Provider value={valor}>
       {children}
       {aviso && (
-        <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: 1080 }}>
-          <div className={`alert alert-${aviso.tipo} shadow mb-0`} role="status">
+        <div
+          className="position-fixed bottom-0 end-0 p-3"
+          style={{ zIndex: 1080 }}
+        >
+          <div
+            className={`alert alert-${aviso.tipo} shadow mb-0`}
+            role="status"
+          >
             {aviso.mensaje}
           </div>
         </div>
