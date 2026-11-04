@@ -126,3 +126,9 @@ export function validar(valor: string, reglas: Regla[]): string {
   }
   return "";
 }
+
+// Exige al menos una letra: rechaza direcciones como "0", "000" o "#####"
+export const contieneLetras: Regla = (v) =>
+  v.trim() !== "" && !/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(v)
+    ? "Debe incluir letras, no solo números o símbolos."
+    : "";
