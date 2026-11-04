@@ -10,6 +10,7 @@ const CLAVE_PRODUCTOS = "pz_productos";
 const CLAVE_ORDENES = "pz_ordenes";
 const CLAVE_USUARIOS = "pz_usuarios";
 const CLAVE_SESION = "pz_sesion";
+const CLAVE_MENSAJES = "pz_mensajes";
 
 export interface Sesion {
   run: string;
@@ -122,4 +123,28 @@ export function alFallarImagen(e: SyntheticEvent<HTMLImageElement>) {
 // Quedan pocas unidades: stock mayor a 0 y menor o igual al stock crítico
 export function ultimasUnidades(p: Producto) {
   return p.stock > 0 && p.stock <= Number(p.stockCritico || 0);
+}
+
+/* ---------- Mensajes del formulario de contacto (R.8) ---------- */
+export interface MensajeContacto {
+  nombre: string;
+  correo: string;
+  comentario: string;
+  fecha: string;
+}
+
+export function obtenerMensajes(): MensajeContacto[] {
+  try {
+    const guardado = localStorage.getItem(CLAVE_MENSAJES);
+    const lista: unknown = guardado ? JSON.parse(guardado) : [];
+    return Array.isArray(lista) ? (lista as MensajeContacto[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function guardarMensaje(datos: Omit<MensajeContacto, "fecha">) {
+  const mensajes = obtenerMensajes();
+  mensajes.push({ ...datos, fecha: new Date().toISOString() });
+  localStorage.setItem(CLAVE_MENSAJES, JSON.stringify(mensajes));
 }

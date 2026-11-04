@@ -13,6 +13,9 @@ import Registro from "./pages/Registro";
 import NoEncontrada from "./pages/NoEncontrada";
 import { paginasActivas } from "./data/directorio";
 import Nosotros from "./pages/Nosotros";
+import Blogs from "./pages/Blogs";
+import BlogDetalle from "./pages/BlogDetalle";
+import Contacto from "./pages/Contacto";
 
 // Cuando migres una página nueva, la agregas aquí y pones activa: true en el directorio
 const COMPONENTES: Record<string, ComponentType> = {
@@ -23,6 +26,9 @@ const COMPONENTES: Record<string, ComponentType> = {
   carrito: Carrito,
   registro: Registro,
   nosotros: Nosotros,
+  blogs: Blogs,
+  blog: BlogDetalle,
+  contacto: Contacto,
 };
 
 export default function App() {
