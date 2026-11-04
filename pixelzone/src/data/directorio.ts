@@ -36,7 +36,7 @@ export const DIRECTORIO: Pagina[] = [
     id: "blogs",
     ruta: "/blogs",
     titulo: "Blogs",
-    activa: true,
+    activa: false,
     zonas: ["menu", "footer"],
   },
   {
@@ -71,7 +71,7 @@ export const DIRECTORIO: Pagina[] = [
     id: "registro",
     ruta: "/registro",
     titulo: "Registrar usuario",
-    activa: false,
+    activa: true,
     zonas: ["superior"],
   },
 ];
