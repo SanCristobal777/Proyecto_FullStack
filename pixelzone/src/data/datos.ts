@@ -250,6 +250,73 @@ export const ORDENES_INICIALES: Orden[] = [
       },
     ],
   },
+    {
+    numero: "OC-1003",
+    fecha: "2026-09-22",
+    cliente: "cliente@gmail.com",
+    estado: "Entregada",
+    total: 184970,
+    items: [
+      { codigo: "JUE-001", nombre: "EA Sports FC 26 (PS5)", precio: 59990, cantidad: 2 },
+      { codigo: "ACC-001", nombre: "Control DualSense Blanco", precio: 64990, cantidad: 1 },
+    ],
+  },
+  {
+    numero: "OC-1004",
+    fecha: "2026-10-02",
+    cliente: "cliente@gmail.com",
+    estado: "Entregada",
+    total: 379980,
+    items: [
+      { codigo: "CON-003", nombre: "Nintendo Switch OLED", precio: 349990, cantidad: 1 },
+      { codigo: "JUE-004", nombre: "Minecraft (Switch)", precio: 29990, cantidad: 1 },
+    ],
+  },
+  {
+    numero: "OC-1005",
+    fecha: "2026-10-08",
+    cliente: "cliente@gmail.com",
+    estado: "Entregada",
+    total: 99970,
+    items: [
+      { codigo: "JUE-001", nombre: "EA Sports FC 26 (PS5)", precio: 59990, cantidad: 1 },
+      { codigo: "ACC-002", nombre: "Mousepad XL RGB", precio: 19990, cantidad: 2 },
+    ],
+  },
+  {
+    numero: "OC-1006",
+    fecha: "2026-10-15",
+    cliente: "cliente@gmail.com",
+    estado: "En preparación",
+    total: 99980,
+    items: [
+      { codigo: "PER-002", nombre: "Mouse Logitech G502 HERO", precio: 44990, cantidad: 1 },
+      { codigo: "JUE-002", nombre: "Zelda: Tears of the Kingdom", precio: 54990, cantidad: 1 },
+    ],
+  },
+  {
+    numero: "OC-1007",
+    fecha: "2026-10-21",
+    cliente: "cliente@gmail.com",
+    estado: "Entregada",
+    total: 609980,
+    items: [
+      { codigo: "CON-001", nombre: "PlayStation 5 Slim 1TB", precio: 549990, cantidad: 1 },
+      { codigo: "JUE-001", nombre: "EA Sports FC 26 (PS5)", precio: 59990, cantidad: 1 },
+    ],
+  },
+  {
+    numero: "OC-1008",
+    fecha: "2026-10-28",
+    cliente: "cliente@gmail.com",
+    estado: "Pagada",
+    total: 129970,
+    items: [
+      { codigo: "PER-003", nombre: "Audífonos HyperX Cloud II", precio: 79990, cantidad: 1 },
+      { codigo: "ACC-002", nombre: "Mousepad XL RGB", precio: 19990, cantidad: 1 },
+      { codigo: "JUE-004", nombre: "Minecraft (Switch)", precio: 29990, cantidad: 1 },
+    ],
+  },
 ];
 export type TipoUsuario = "Administrador" | "Vendedor" | "Cliente";
 

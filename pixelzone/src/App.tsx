@@ -12,6 +12,7 @@ import Carrito from "./pages/Carrito";
 import Registro from "./pages/Registro";
 import NoEncontrada from "./pages/NoEncontrada";
 import { paginasActivas } from "./data/directorio";
+import Nosotros from "./pages/Nosotros";
 
 // Cuando migres una página nueva, la agregas aquí y pones activa: true en el directorio
 const COMPONENTES: Record<string, ComponentType> = {
@@ -21,6 +22,7 @@ const COMPONENTES: Record<string, ComponentType> = {
   login: Login,
   carrito: Carrito,
   registro: Registro,
+  nosotros: Nosotros,
 };
 
 export default function App() {

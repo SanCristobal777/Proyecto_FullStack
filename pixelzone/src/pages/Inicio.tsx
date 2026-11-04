@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import TarjetaProducto from "../components/TarjetaProducto";
-import { CATEGORIAS } from "../data/datos";
 import { estaActiva } from "../data/directorio";
-import { obtenerProductos } from "../utils/almacen";
+import { obtenerOrdenes, obtenerProductos } from "../utils/almacen";
+import { masVendidos } from "../utils/ventas";
 import { Link } from "react-router-dom";
 
 const datos = [
@@ -12,12 +12,11 @@ const datos = [
 ];
 
 export default function Inicio() {
-  const destacados = useMemo(() => {
-    const disponibles = obtenerProductos().filter((p) => p.stock > 0);
-    return CATEGORIAS.flatMap((c) =>
-      disponibles.filter((p) => p.categoria === c).slice(0, 2),
-    ).slice(0, 8);
-  }, []);
+  const anio = new Date().getFullYear();
+  const destacados = useMemo(
+    () => masVendidos(obtenerOrdenes(), obtenerProductos(), anio, 8),
+    [anio],
+  );
 
   return (
     <main>
@@ -74,13 +73,18 @@ export default function Inicio() {
       <section className="container" aria-labelledby="titulo-destacados">
         <div className="d-flex justify-content-between align-items-end titulo-pagina">
           <h2 id="titulo-destacados" className="mb-0">
-            Productos destacados
+            Más vendidos de {anio}
           </h2>
           <Link to="/productos">Ver todo el catálogo</Link>
         </div>
         <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-          {destacados.map((p) => (
-            <TarjetaProducto key={p.codigo} producto={p} conBoton={false} />
+          {destacados.map(({ producto, vendidos }) => (
+            <TarjetaProducto
+              key={producto.codigo}
+              producto={producto}
+              vendidos={vendidos}
+              conBoton={false}
+            />
           ))}
         </div>
       </section>

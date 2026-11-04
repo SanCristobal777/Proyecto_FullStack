@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from "react";
 import {
   ORDENES_INICIALES,
   PRODUCTOS_INICIALES,
@@ -100,4 +101,25 @@ export function rutaImagen(ruta: string) {
 
 export function formatearPrecio(precio: number) {
   return precio === 0 ? "GRATIS" : "$" + precio.toLocaleString("es-CL");
+}
+
+// Imagen principal + dos vistas más: CON-001.webp, CON-001-b.webp, CON-001-c.webp
+export function vistasProducto(imagen: string) {
+  if (!imagen.startsWith("img/productos/")) return [imagen];
+  const punto = imagen.lastIndexOf(".");
+  const base = imagen.slice(0, punto);
+  const extension = imagen.slice(punto);
+  return [imagen, `${base}-b${extension}`, `${base}-c${extension}`];
+}
+
+// Si la foto del producto no existe, se muestra "sin-imagen" en vez de un ícono roto
+const SIN_IMAGEN = "/img/productos/sin-imagen.svg";
+export function alFallarImagen(e: SyntheticEvent<HTMLImageElement>) {
+  const img = e.currentTarget;
+  if (!img.src.endsWith(SIN_IMAGEN)) img.src = SIN_IMAGEN;
+}
+
+// Quedan pocas unidades: stock mayor a 0 y menor o igual al stock crítico
+export function ultimasUnidades(p: Producto) {
+  return p.stock > 0 && p.stock <= Number(p.stockCritico || 0);
 }
