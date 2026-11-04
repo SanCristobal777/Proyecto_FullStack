@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import ResenasBlog from "../components/ResenasBlog";
 import { buscarBlog, formatearFecha } from "../data/blogs";
 
 // Reemplaza a blog-1.html y blog-2.html: una sola página para todos los blogs
@@ -61,6 +62,9 @@ export default function BlogDetalle() {
             Volver a Blogs
           </Link>
         </article>
+
+        {/* key: al cambiar de blog se reinician las reseñas y el formulario */}
+        <ResenasBlog key={blog.id} blogId={blog.id} />
       </div>
     </main>
   );

@@ -148,3 +148,37 @@ export function guardarMensaje(datos: Omit<MensajeContacto, "fecha">) {
   mensajes.push({ ...datos, fecha: new Date().toISOString() });
   localStorage.setItem(CLAVE_MENSAJES, JSON.stringify(mensajes));
 }
+
+/* ---------- Reseñas de los blogs ---------- */
+const CLAVE_RESENAS = "pz_resenas";
+
+export interface Resena {
+  blogId: string;
+  nombre: string;
+  calificacion: number; // 1 a 5 estrellas
+  comentario: string;
+  fecha: string;
+}
+
+function leerResenas(): Resena[] {
+  try {
+    const guardado = localStorage.getItem(CLAVE_RESENAS);
+    const lista: unknown = guardado ? JSON.parse(guardado) : [];
+    return Array.isArray(lista) ? (lista as Resena[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+// Reseñas de un blog, de la más nueva a la más antigua
+export function obtenerResenas(blogId: string): Resena[] {
+  return leerResenas()
+    .filter((r) => r.blogId === blogId)
+    .sort((a, b) => b.fecha.localeCompare(a.fecha));
+}
+
+export function guardarResena(datos: Omit<Resena, "fecha">) {
+  const resenas = leerResenas();
+  resenas.push({ ...datos, fecha: new Date().toISOString() });
+  localStorage.setItem(CLAVE_RESENAS, JSON.stringify(resenas));
+}

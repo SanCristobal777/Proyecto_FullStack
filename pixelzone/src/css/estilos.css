@@ -328,3 +328,42 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4, .h5, .h6, .navbar-brand {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* ---------- 14. Reseñas de blogs ---------- */
+.resenas {
+  border-top: 2px solid var(--pz-linea);
+}
+
+.estrellas { color: #C98A00; } /* dorado oscuro: buen contraste sobre blanco */
+
+.selector-estrellas {
+  display: inline-flex;
+  flex-direction: row-reverse; /* permite pintar las estrellas anteriores con ~ */
+  gap: .25rem;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.selector-estrellas label {
+  cursor: pointer;
+  color: #B9B4CF;
+  transition: transform .1s;
+}
+
+.selector-estrellas label:hover { transform: scale(1.1); }
+
+.selector-estrellas input:checked ~ label,
+.selector-estrellas label:hover,
+.selector-estrellas label:hover ~ label { color: #C98A00; }
+
+.selector-estrellas input:focus-visible + label {
+  outline: 3px solid var(--pz-coral);
+  outline-offset: 2px;
+}
+
+.selector-estrellas.is-invalid label { color: var(--bs-danger); }
+
+.tarjeta-resena {
+  background: #fff;
+  border: 2px solid var(--pz-linea);
+}
