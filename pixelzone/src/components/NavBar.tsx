@@ -26,6 +26,11 @@ export default function NavBar() {
             {sesion ? (
               <>
                 <span className="me-2">Hola, {sesion.nombre}</span>
+                {sesion.tipo !== "Cliente" && (
+                  <Link to="/admin" className="link-light me-2">
+                    Panel de administración
+                  </Link>
+                )}
                 <button
                   type="button"
                   className="btn btn-link link-light p-0 align-baseline"

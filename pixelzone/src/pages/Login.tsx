@@ -83,7 +83,7 @@ function Login() {
     iniciar(usuario);
     setMensaje({ tipo: "success", texto: `Bienvenido/a, ${usuario.nombre}.` });
     // Cuando exista el panel de administración, Administrador y Vendedor irán allá
-    setTimeout(() => navegar("/"), 800);
+    setTimeout(() => navegar(usuario.tipo === "Cliente" ? "/" : "/admin"), 800);
   };
 
   return (
