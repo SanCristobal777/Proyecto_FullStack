@@ -170,10 +170,10 @@ function leerResenas(): Resena[] {
   }
 }
 
-// Reseñas de un blog, de la más nueva a la más antigua
-export function obtenerResenas(blogId: string): Resena[] {
+// Reseñas de la más nueva a la más antigua (de un blog o de todos)
+export function obtenerResenas(blogId?: string): Resena[] {
   return leerResenas()
-    .filter((r) => r.blogId === blogId)
+    .filter((r) => !blogId || r.blogId === blogId)
     .sort((a, b) => b.fecha.localeCompare(a.fecha));
 }
 
